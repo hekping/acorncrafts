@@ -14,9 +14,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.post("/submit", (req, res) => {
+app.post("/submit", async (req, res) => {
   try {
     const data = req.body;
+
+    // validate data
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid data.");
+    }
 
     // create nodemailer transport object
     const transporter = nodemailer.createTransport({
@@ -24,39 +29,26 @@ app.post("/submit", (req, res) => {
       port: 465,
       secure: true,
       auth: {
-        user: "ayomiakintoye00@gmail.com", // your email address
-        pass: "mwphwjmkjsiglnoz", // your email password
+        user: "ayomiakintoye00@gmail.com",
+        pass: "mwphwjmkjsiglnoz",
       },
     });
 
     // create mail options object
     const mailOptions = {
-      from: "ayomiakintoye00@gmail.com", // your email address
-      to: "techmornach@gmail.com", // recipient email address
+      from: "ayomiakintoye00@gmail.com",
+      to: "isaiahgabriel175@gmail.com", // recipient email address
       subject: "Data file",
-      text: "Please find attached the data file.",
-      attachments: [
-        {
-          filename: "data.bin",
-          content: req.body,
-          encoding: "base64"
-        },
-      ],
+      text: JSON.stringify(data), // use JSON.stringify to convert the data to a string
     };
 
     // send mail with defined transport object
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send("Error sending email.");
-      } else {
-        console.log("Email sent successfully.");
-        res.sendFile(path.join(__dirname, "confirmation.html"));
-      }
-    });
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully.", info);
+    res.sendFile(path.join(__dirname, "confirmation.html"));
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error saving data.");
+    res.status(500).send("Error sending email.");
   }
 });
 
