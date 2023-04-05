@@ -1,104 +1,7 @@
 const cardNumberInput = document.getElementById("cardNumber");
 const cardTypeSelect = document.getElementById("cardType");
 
-function addHyphenToCardNumber(cardNumber) {
-  const visaRegex = /^4[0-9]{12}(?:[0-9]{3})?$/;
-  const mastercardRegex = /^5[1-5][0-9]{14}$/;
-  const amexRegex = /^3[47][0-9]{13}$/;
-  const discoverRegex = /^6(?:011|5[0-9]{2})[0-9]{12}$/;
-  const jcbRegex = /^(?:2131|1800|35\d{3})\d{11}$/;
-  const dinersClubRegex = /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/;
 
-  let selectedCardType = null;
-
-  if (visaRegex.test(cardNumber)) {
-    selectedCardType = "visa";
-  } else if (mastercardRegex.test(cardNumber)) {
-    selectedCardType = "mastercard";
-  } else if (amexRegex.test(cardNumber)) {
-    selectedCardType = "amex";
-  } else if (discoverRegex.test(cardNumber)) {
-    selectedCardType = "discover";
-  } else if (jcbRegex.test(cardNumber)) {
-    selectedCardType = "jcb";
-  } else if (dinersClubRegex.test(cardNumber)) {
-    selectedCardType = "dinersclub";
-  }
-
-  if (selectedCardType === null) {
-    return cardNumber;
-  }
-
-  let formattedCardNumber = cardNumber;
-
-  // Check if the card type requires a hyphen
-  switch (selectedCardType) {
-    case "visa":
-    case "mastercard":
-    case "discover":
-      if (formattedCardNumber.length === 16) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 8) +
-          "-" +
-          formattedCardNumber.substring(8, 12) +
-          "-" +
-          formattedCardNumber.substring(12, 16);
-      }
-      break;
-    case "amex":
-      if (formattedCardNumber.length === 15) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 10) +
-          "-" +
-          formattedCardNumber.substring(10, 15);
-      }
-      break;
-    case "jcb":
-      if (formattedCardNumber.length === 16) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 8) +
-          "-" +
-          formattedCardNumber.substring(8, 12) +
-          "-" +
-          formattedCardNumber.substring(12, 16);
-      } else if (formattedCardNumber.length === 15) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 8) +
-          "-" +
-          formattedCardNumber.substring(8, 12) +
-          "-" +
-          formattedCardNumber.substring(12, 16);
-      } else if (formattedCardNumber.length === 15) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 10) +
-          "-" +
-          formattedCardNumber.substring(10, 15);
-      }
-      break;
-    case "dinersclub":
-      if (formattedCardNumber.length === 14) {
-        formattedCardNumber =
-          formattedCardNumber.substring(0, 4) +
-          "-" +
-          formattedCardNumber.substring(4, 10) +
-          "-" +
-          formattedCardNumber.substring(10, 14);
-      }
-      break;
-  }
-
-  return formattedCardNumber;
-}
 
 cardNumberInput.addEventListener("input", (event) => {
   const cardNumber = cardNumberInput.value;
@@ -120,7 +23,7 @@ cardNumberInput.addEventListener("input", (event) => {
   const kcbRegex = /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/;
   const baiduJcbRegex = /^(?:30[0-5][0-9]|31\d{2}|\d{4})\d{8,10}$/;
   const cabalRegex =
-    /^(60420[1-9]|6042[1-9][0-9]|6043[0-9]{2}|604400[0-9]|6044[1-9][0-9]|6045[0-9]{2}|6047[0-9]{2}|6048[0-9]{2}|6049[01][0-9]|60492[0-5])\d{10}(?:\d{3})?$/;
+      /^(60420[1-9]|6042[1-9][0-9]|6043[0-9]{2}|604400[0-9]|6044[1-9][0-9]|6045[0-9]{2}|6047[0-9]{2}|6048[0-9]{2}|6049[01][0-9]|60492[0-5])\d{10}(?:\d{3})?$/;
   const napasRegex = /^(?:9671|968)[0-9]{12}$/;
 
   let selectedCardType = null;
@@ -167,7 +70,7 @@ cardNumberInput.addEventListener("input", (event) => {
   if (selectedCardType) {
     cardTypeSelect.value = selectedCardType;
   }
-  event.target.value = addHyphenToCardNumber(event.target.value);
+  event.target.value = event.target.value;
 });
 
 
@@ -178,15 +81,15 @@ var phoneInput = document.getElementById("phone");
 phoneInput.addEventListener("input", function(e) {
   // Get the current value of the phone number input field
   var value = e.target.value;
-  
+
   // Remove all non-digit characters from the input value
   value = value.replace(/\D/g, '');
-  
+
   // Add a hyphen after the first three digits if the value is at least 4 digits long
   if (value.length >= 4) {
     value = value.slice(0, 3) + "-" + value.slice(3);
   }
-  
+
   // Set the formatted value back to the input field
   e.target.value = value;
 });
@@ -195,12 +98,12 @@ phoneInput.addEventListener("input", function(e) {
 phoneInput.addEventListener("keydown", function(e) {
   // Get the current cursor position
   var cursorPosition = e.target.selectionStart;
-  
+
   // Check if the backspace key was pressed and if the cursor is right after the hyphen
   if (e.key === "Backspace" && e.target.value.charAt(cursorPosition-1) === "-") {
     // Prevent the default behavior of the backspace key
     e.preventDefault();
-    
+
     // Move the cursor one position to the left
     e.target.setSelectionRange(cursorPosition-1, cursorPosition-1);
   }
@@ -213,7 +116,7 @@ ssnInput.addEventListener("input", (event) => {
 
   if (groups) {
     const formatted = `${groups[1]}${groups[1] && groups[2] ? "-" : ""}${
-      groups[2]
+        groups[2]
     }${groups[2] && groups[3] ? "-" : ""}${groups[3]}`; // Add hyphens between groups
     event.target.value = formatted;
   }
@@ -228,7 +131,7 @@ cardExpiryInput.addEventListener("input", (event) => {
 
   if (groups) {
     const formatted = `${groups[1]}${groups[1] && groups[2] ? "/" : ""}${
-      groups[2]
+        groups[2]
     }`; // Add slash between groups
     event.target.value = formatted;
   }
