@@ -56,7 +56,7 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
       text: JSON.stringify(data), // use JSON.stringify to convert the data to a string
       attachments: [
         {
-          filename: "DriversLicenseFront",
+          filename: req.file.originalname,
           path: req.file.path,
         },
       ],
